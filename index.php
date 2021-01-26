@@ -1,8 +1,11 @@
 <?php
 
 //use Singleton\FileSave;
-use Multiton\FileSave;
-use StaticFabric\StaticFactory;
+//use Multiton\FileSave;
+//use StaticFabric\StaticFactory;
+
+use FabricMethod\FileSaveFactory;
+use FabricMethod\MysqlSaveFactory;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -28,4 +31,12 @@ $file->save(__DIR__);
 
 $obj = StaticFactory::create('\StaticFabric\FactoryClass');
 $obj->save();
+*/
+
+/*//FABRIC METHOD
+
+//$factory = new FileSaveFactory('testFile.txt');
+$factory = new MysqlSaveFactory('localhost', 'root', '', 'patterns');
+
+$factory->createSaver()->save("hello world");
 */
