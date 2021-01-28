@@ -4,5 +4,5 @@ namespace FabricMethod;
 
 interface ISave
 {
-    public function save($message);
+    public function save(string $message);
 }

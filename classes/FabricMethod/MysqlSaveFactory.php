@@ -4,7 +4,7 @@ namespace FabricMethod;
 
 class MysqlSaveFactory implements ISaveFactory
 {
-    private $host, $user, $pass, $db;
+    private string $host, $user, $pass, $db;
 
     public function __construct($host, $user, $pass, $db)
     {

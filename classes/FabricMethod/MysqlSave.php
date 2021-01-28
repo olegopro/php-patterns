@@ -2,8 +2,12 @@
 
 namespace FabricMethod;
 
+use JetBrains\PhpStorm\Language;
+
 class MysqlSave implements ISave
 {
+    private object $mysqli;
+
     public function __construct($host, $user, $pass, $db)
     {
         $this->mysqli = new \mysqli($host, $user, $pass, $db);
@@ -15,6 +19,6 @@ class MysqlSave implements ISave
 
     public function save($message)
     {
-        $result = $this->mysqli->query("INSERT INTO `messages`(`text`) VALUES ('" . $message . "')");
+        $this->mysqli->query("INSERT INTO `messages`(`text`) VALUES ('" . $message . "')");
     }
 }
