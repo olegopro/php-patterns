@@ -12,6 +12,9 @@ use AbstractFactory\MysqlDatabaseFactory;
 use AbstractFactory\SqliteDatabaseFactory;
 use AbstractFactory\DatabaseFactory;
 
+use Builder\MysqlQueryBuilder;
+use Builder\SQLQueryBuilder;
+
 require "functions.php";
 spl_autoload_register('project_autoload');
 
@@ -62,3 +65,17 @@ function queryExecute(DatabaseFactory $factory)
 queryExecute(new MysqlDatabaseFactory('localhost', 'root', '', 'patterns'));
 queryExecute(new SqliteDatabaseFactory('test.db'));
 */
+
+//BUILDER
+
+function queryExecute(SQLQueryBuilder $builder)
+{
+    $query = $builder->select(['id', 'text'])
+                     ->from('messages')
+                     ->where('id', 1)
+                     ->getQuery();
+
+    echo $query;
+}
+
+queryExecute(new MysqlQueryBuilder());
