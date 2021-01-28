@@ -4,8 +4,7 @@ namespace FabricMethod;
 
 class FileSaveFactory implements ISaveFactory
 {
-
-    private $filepath;
+    private string $filepath;
 
     public function __construct(string $filepath)
     {

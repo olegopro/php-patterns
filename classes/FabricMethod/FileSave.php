@@ -4,7 +4,7 @@ namespace FabricMethod;
 
 class FileSave implements ISave
 {
-    private $filepath;
+    private string $filepath;
 
     public function __construct($filepath)
     {
@@ -15,5 +15,4 @@ class FileSave implements ISave
     {
         file_put_contents($this->filepath, $message);
     }
-
 }
