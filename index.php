@@ -33,7 +33,8 @@ $obj = StaticFactory::create('\StaticFabric\FactoryClass');
 $obj->save();
 */
 
-//FABRIC METHOD
+/*
+ //FABRIC METHOD
 
 //$factory = new FileSaveFactory('testFile.txt');
 $factory = new MysqlSaveFactory('192.168.44.25', 'root', '2704509Ee', 'patterns');
@@ -42,4 +43,5 @@ var_dump($factory);
 
 $date = date('H:i:s');
 $factory->createSaver()->save("hello world $date");
+*/
 
