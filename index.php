@@ -2,10 +2,15 @@
 
 //use Singleton\FileSave;
 //use Multiton\FileSave;
-//use StaticFabric\StaticFactory;
+
+use StaticFabric\StaticFactory;
 
 use FabricMethod\FileSaveFactory;
 use FabricMethod\MysqlSaveFactory;
+
+use AbstractFactory\MysqlDatabaseFactory;
+use AbstractFactory\SqliteDatabaseFactory;
+use AbstractFactory\DatabaseFactory;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -34,9 +39,9 @@ $obj->save();
 */
 
 /*
- //FABRIC METHOD
+//FABRIC METHOD
 
-//$factory = new FileSaveFactory('testFile.txt');
+$factory = new FileSaveFactory('testFile.txt');
 $factory = new MysqlSaveFactory('192.168.44.25', 'root', '2704509Ee', 'patterns');
 
 var_dump($factory);
@@ -45,3 +50,15 @@ $date = date('H:i:s');
 $factory->createSaver()->save("hello world $date");
 */
 
+/*
+//ABSTRACT FACTORY
+
+function queryExecute(DatabaseFactory $factory)
+{
+    $obj = $factory->query();
+    $obj->execute("INSERT INTO `message`(`text`) VALUES ('test')");
+}
+
+queryExecute(new MysqlDatabaseFactory('localhost', 'root', '', 'patterns'));
+queryExecute(new SqliteDatabaseFactory('test.db'));
+*/
