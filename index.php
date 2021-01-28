@@ -84,6 +84,7 @@ function queryExecute(SQLQueryBuilder $builder)
 queryExecute(new MysqlQueryBuilder());
 */
 
+/*
 //Prototype
 
 $user = new User('User');
@@ -93,3 +94,4 @@ $post->addComment('Hello');
 $post2 = clone $post;
 
 var_dump($post, $post2);
+*/
