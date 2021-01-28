@@ -15,6 +15,9 @@ use AbstractFactory\DatabaseFactory;
 use Builder\MysqlQueryBuilder;
 use Builder\SQLQueryBuilder;
 
+use Prototype\User;
+use Prototype\Post;
+
 require "functions.php";
 spl_autoload_register('project_autoload');
 
@@ -66,6 +69,7 @@ queryExecute(new MysqlDatabaseFactory('localhost', 'root', '', 'patterns'));
 queryExecute(new SqliteDatabaseFactory('test.db'));
 */
 
+/*
 //BUILDER
 
 function queryExecute(SQLQueryBuilder $builder)
@@ -74,8 +78,18 @@ function queryExecute(SQLQueryBuilder $builder)
                      ->from('messages')
                      ->where('id', 1)
                      ->getQuery();
-
     echo $query;
 }
 
 queryExecute(new MysqlQueryBuilder());
+*/
+
+//Prototype
+
+$user = new User('User');
+$post = new Post($user, 'First Post', 'Hello world');
+$post->addComment('Hello');
+
+$post2 = clone $post;
+
+var_dump($post, $post2);
