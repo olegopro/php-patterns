@@ -3,28 +3,31 @@
 //use Singleton\FileSave;
 //use Multiton\FileSave;
 
-use StaticFabric\StaticFactory;
+//use StaticFabric\StaticFactory;
 
-use FabricMethod\FileSaveFactory;
-use FabricMethod\MysqlSaveFactory;
+//use FabricMethod\FileSaveFactory;
+//use FabricMethod\MysqlSaveFactory;
 
-use AbstractFactory\MysqlDatabaseFactory;
-use AbstractFactory\SqliteDatabaseFactory;
-use AbstractFactory\DatabaseFactory;
+//use AbstractFactory\MysqlDatabaseFactory;
+//use AbstractFactory\SqliteDatabaseFactory;
+//use AbstractFactory\DatabaseFactory;
 
-use Builder\MysqlQueryBuilder;
-use Builder\SQLQueryBuilder;
+//use Builder\MysqlQueryBuilder;
+//use Builder\SQLQueryBuilder;
 
-use Prototype\User;
-use Prototype\Post;
+//use Prototype\User;
+//use Prototype\Post;
 
-use Observer\Blog;
-use Observer\SendMailPlugin;
-use Observer\ChangeTextPlugin;
+//use Observer\Blog;
+//use Observer\SendMailPlugin;
+//use Observer\ChangeTextPlugin;
 
-use Strategy\DocumentSave;
-use Strategy\ImagesSave;
-use Strategy\BaseLogic;
+//use Strategy\DocumentSave;
+//use Strategy\ImagesSave;
+//use Strategy\BaseLogic;
+
+use Iterator\Blog;
+use Iterator\Post;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -144,3 +147,19 @@ saveStrategy([
     new DocumentSave('patterns.docx')
 ]);
 */
+
+//ITERATOR
+
+$blog = new Blog();
+
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+$blog->addPost(new Post('title', 'text', 'author'));
+
+foreach ($blog as $post) {
+    var_dump($post);
+}
