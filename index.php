@@ -21,7 +21,11 @@ use Prototype\Post;
 use Observer\Blog;
 use Observer\SendMailPlugin;
 use Observer\ChangeTextPlugin;
-use Observer\ChangeTitlePlugin;
+
+Strategy
+use Strategy\DocumentSave;
+use Strategy\ImagesSave;
+use Strategy\BaseLogic;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -116,4 +120,28 @@ $blog->update();
 
 echo $blog->title . '<br>';
 echo $blog->text . '<br>';
+*/
+
+/*
+//STRATEGY
+
+//$obj = new BaseLogic(new DocumentSave('patterns.docx'));
+//$obj = new BaseLogic(new ImagesSave('strategy.png'));
+//$obj->execute();
+
+function saveStrategy($strategyCollection)
+{
+    foreach ($strategyCollection as $item) {
+        if ($item instanceof \Strategy\IFileSave) {
+            $item->save();
+        }
+    }
+
+    return TRUE;
+}
+
+saveStrategy([
+    new ImagesSave('strategy.png'),
+    new DocumentSave('patterns.docx')
+]);
 */
