@@ -22,7 +22,6 @@ use Observer\Blog;
 use Observer\SendMailPlugin;
 use Observer\ChangeTextPlugin;
 
-Strategy
 use Strategy\DocumentSave;
 use Strategy\ImagesSave;
 use Strategy\BaseLogic;
