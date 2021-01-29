@@ -18,6 +18,11 @@ use Builder\SQLQueryBuilder;
 use Prototype\User;
 use Prototype\Post;
 
+use Observer\Blog;
+use Observer\SendMailPlugin;
+use Observer\ChangeTextPlugin;
+
+Strategy
 use Strategy\DocumentSave;
 use Strategy\ImagesSave;
 use Strategy\BaseLogic;
@@ -100,6 +105,24 @@ $post2 = clone $post;
 var_dump($post, $post2);
 */
 
+/*
+//OBSERVER
+
+$blog = new Blog();
+$blog->title = ' Hello world';
+$blog->text = ' Some text';
+
+$blog->attach(new SendMailPlugin(), 'all');
+$blog->attach(new ChangeTextPlugin(), 'blog:create');
+$blog->attach(new ChangeTitlePlugin(), 'blog:update');
+
+$blog->update();
+
+echo $blog->title . '<br>';
+echo $blog->text . '<br>';
+*/
+
+/*
 //STRATEGY
 
 //$obj = new BaseLogic(new DocumentSave('patterns.docx'));
@@ -121,3 +144,4 @@ saveStrategy([
     new ImagesSave('strategy.png'),
     new DocumentSave('patterns.docx')
 ]);
+*/
