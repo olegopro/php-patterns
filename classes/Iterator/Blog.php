@@ -2,7 +2,10 @@
 
 namespace Iterator;
 
-class Blog implements \Iterator
+use Exception;
+use Traversable;
+
+class Blog implements \IteratorAggregate
 {
     private array $posts = [];
     private int $position = 0;
@@ -12,7 +15,7 @@ class Blog implements \Iterator
         array_push($this->posts, $post);
     }
 
-    public function getPost()
+    /*public function getPost()
     {
         return $this->posts;
     }
@@ -48,5 +51,10 @@ class Blog implements \Iterator
     {
         echo __METHOD__ . '<br>';
         $this->position = 0;
+    }*/
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->posts);
     }
 }
