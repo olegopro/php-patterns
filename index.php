@@ -18,6 +18,10 @@ use Builder\SQLQueryBuilder;
 use Prototype\User;
 use Prototype\Post;
 
+use Strategy\DocumentSave;
+use Strategy\ImagesSave;
+use Strategy\BaseLogic;
+
 require "functions.php";
 spl_autoload_register('project_autoload');
 
@@ -95,3 +99,25 @@ $post2 = clone $post;
 
 var_dump($post, $post2);
 */
+
+//STRATEGY
+
+//$obj = new BaseLogic(new DocumentSave('patterns.docx'));
+//$obj = new BaseLogic(new ImagesSave('strategy.png'));
+//$obj->execute();
+
+function saveStrategy($strategyCollection)
+{
+    foreach ($strategyCollection as $item) {
+        if ($item instanceof \Strategy\IFileSave) {
+            $item->save();
+        }
+    }
+
+    return TRUE;
+}
+
+saveStrategy([
+    new ImagesSave('strategy.png'),
+    new DocumentSave('patterns.docx')
+]);
