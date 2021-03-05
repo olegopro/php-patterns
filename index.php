@@ -26,8 +26,12 @@
 //use Strategy\ImagesSave;
 //use Strategy\BaseLogic;
 
-use Iterator\Blog;
-use Iterator\Post;
+//use Iterator\Blog;
+//use Iterator\Post;
+
+use TemplateMethod\Page;
+use TemplateMethod\HomePage;
+use TemplateMethod\AboutPage;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -67,9 +71,9 @@ $date = date('H:i:s');
 $factory->createSaver()->save("hello world $date");
 */
 
-/*
 //ABSTRACT FACTORY
 
+/*
 function queryExecute(DatabaseFactory $factory)
 {
     $obj = $factory->query();
@@ -80,9 +84,9 @@ queryExecute(new MysqlDatabaseFactory('localhost', 'root', '', 'patterns'));
 queryExecute(new SqliteDatabaseFactory('test.db'));
 */
 
-/*
 //BUILDER
 
+/*
 function queryExecute(SQLQueryBuilder $builder)
 {
     $query = $builder->select(['id', 'text'])
@@ -144,13 +148,14 @@ function saveStrategy($strategyCollection)
 
 saveStrategy([
     new ImagesSave('strategy.png'),
-    new DocumentSave('patterns.docx')
+    new DocumentSave('      patterns.docx')
 ]);
 */
 
 //ITERATOR
 
-$blog = new Blog();
+/*
+ * $blog = new Blog();
 
 $blog->addPost(new Post('title', 'text', 'author'));
 $blog->addPost(new Post('title', 'text', 'author'));
@@ -163,3 +168,9 @@ $blog->addPost(new Post('title', 'text', 'author'));
 foreach ($blog as $post) {
     var_dump($post);
 }
+*/
+
+//TEMPLATE METHOD
+
+$home = new HomePage();
+$home->output();
