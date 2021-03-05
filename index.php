@@ -33,9 +33,15 @@
 //use TemplateMethod\HomePage;
 //use TemplateMethod\AboutPage;
 
-use NullObject\Db;
-use NullObject\User;
-use NullObject\UserRepository;
+//use NullObject\Db;
+//use NullObject\User;
+//use NullObject\UserRepository;
+
+use Mediator\Router;
+use Mediator\Data;
+use Mediator\App;
+use Mediator\Page;
+use Mediator\PageHelper;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -183,6 +189,7 @@ $home->output();
 
 //NULL OBJECT
 
+/*
 $db = new Db('localhost', 'root', '', 'patterns');
 $userRepository = new UserRepository($db);
 $user = $userRepository->fetchById(2);
@@ -190,3 +197,10 @@ $user = $userRepository->fetchById(2);
 //var_dump($user);
 
 echo $user->getLogin();
+*/
+
+//MEDIATOR
+
+$router = new Router();
+new PageHelper(new Data(), $router, new Page());
+$router->request();
