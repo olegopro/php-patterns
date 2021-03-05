@@ -29,9 +29,13 @@
 //use Iterator\Blog;
 //use Iterator\Post;
 
-use TemplateMethod\Page;
-use TemplateMethod\HomePage;
-use TemplateMethod\AboutPage;
+//use TemplateMethod\Page;
+//use TemplateMethod\HomePage;
+//use TemplateMethod\AboutPage;
+
+use NullObject\Db;
+use NullObject\User;
+use NullObject\UserRepository;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -63,7 +67,7 @@ $obj->save();
 //FABRIC METHOD
 
 $factory = new FileSaveFactory('testFile.txt');
-$factory = new MysqlSaveFactory('192.168.44.25', 'root', '2704509Ee', 'patterns');
+$factory = new MysqlSaveFactory('localhost', 'root', '', 'patterns');
 
 var_dump($factory);
 
@@ -155,7 +159,7 @@ saveStrategy([
 //ITERATOR
 
 /*
- * $blog = new Blog();
+$blog = new Blog();
 
 $blog->addPost(new Post('title', 'text', 'author'));
 $blog->addPost(new Post('title', 'text', 'author'));
@@ -172,5 +176,17 @@ foreach ($blog as $post) {
 
 //TEMPLATE METHOD
 
+/*
 $home = new HomePage();
 $home->output();
+*/
+
+//NULL OBJECT
+
+$db = new Db('localhost', 'root', '', 'patterns');
+$userRepository = new UserRepository($db);
+$user = $userRepository->fetchById(2);
+
+//var_dump($user);
+
+echo $user->getLogin();
