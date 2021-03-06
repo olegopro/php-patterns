@@ -37,11 +37,16 @@
 //use NullObject\User;
 //use NullObject\UserRepository;
 
-use Mediator\Router;
-use Mediator\Data;
-use Mediator\App;
-use Mediator\Page;
-use Mediator\PageHelper;
+//use Mediator\Router;
+//use Mediator\Data;
+//use Mediator\App;
+//use Mediator\Page;
+//use Mediator\PageHelper;
+
+//use Facade\Db;
+//use Facade\Log;
+//use Facade\Mail;
+//use Facade\Document;
 
 require "functions.php";
 spl_autoload_register('project_autoload');
@@ -209,6 +214,7 @@ $router->request();
 
 //COMMAND
 
+/*
 $chat = new \Command\ChatInterface();
 $user = new \Command\User();
 
@@ -216,3 +222,15 @@ $chat->setCommand(new \Command\GoOnLine($user));
 
 $chat->run();
 $chat->undo();
+*/
+
+//FACADE
+
+/*
+$db = new Db('localhost', 'root', '', 'patterns');
+$log = new Log('logFile.txt');
+$mail = new Mail('admin@admin', 'subject', 'message', '');
+
+$document = new Document($db, $log, $mail);
+$document->save('new document');
+*/
