@@ -201,6 +201,18 @@ echo $user->getLogin();
 
 //MEDIATOR
 
+/*
 $router = new Router();
 new PageHelper(new Data(), $router, new Page());
 $router->request();
+*/
+
+//COMMAND
+
+$chat = new \Command\ChatInterface();
+$user = new \Command\User();
+
+$chat->setCommand(new \Command\GoOnLine($user));
+
+$chat->run();
+$chat->undo();
