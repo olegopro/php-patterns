@@ -296,3 +296,15 @@ $safeSave->save();
 $safeSave = new \Bridge\SafeSave($sqliteDriver, 'Hello', 'md5');
 $safeSave->save();
 */
+
+//MVC
+
+$model = new \mvc\Model\Model();
+$controller = new \mvc\Controller\Controller($model);
+
+$controller->action();
+
+$view = new \mvc\View\View($controller, $model);
+
+echo $view->output();
+
