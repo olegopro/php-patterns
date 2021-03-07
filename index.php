@@ -238,8 +238,28 @@ $document->save('new document');
 
 //ADAPTER
 
-/*$form = new \Adapter\WebMoney(['key' => 'JKHBSD@#(#@QKLN']);
-$form->getFormPay(100);*/
+/*
+$form = new \Adapter\WebMoney(['key' => 'JKHBSD@#(#@QKLN']);
+$form->getFormPay(100);
 
 $adapter = new \Adapter\PaymentAdapter(new \Adapter\WebMoney(['key' => 'JKHBSD@#(#@QKLN']));
 $adapter->pay(1000);
+*/
+
+//COMPOSITE
+
+$form = new \Composite\Form();
+$form->addInput(new \Composite\LabelElement('Label'));
+$form->addInput(new \Composite\InputElement());
+
+$fieldset = new \Composite\FieldsetElement();
+
+$fieldset->addInput(new \Composite\LabelElement('Label2'));
+$fieldset->addInput(new \Composite\InputElement());
+
+$fieldset->addInput(new \Composite\LabelElement('Label3'));
+$fieldset->addInput(new \Composite\InputElement());
+
+$form->addInput($fieldset);
+
+echo $form->render();
