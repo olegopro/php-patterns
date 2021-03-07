@@ -248,6 +248,7 @@ $adapter->pay(1000);
 
 //COMPOSITE
 
+/*
 $form = new \Composite\Form();
 $form->addInput(new \Composite\LabelElement('Label'));
 $form->addInput(new \Composite\InputElement());
@@ -263,3 +264,14 @@ $fieldset->addInput(new \Composite\InputElement());
 $form->addInput($fieldset);
 
 echo $form->render();
+*/
+
+//DECORATOR
+
+$page = new \Decorator\BasicPage('Title');
+echo $page->getTitle();
+echo $page->render();
+
+$homepage = new \Decorator\HomePage($page);
+echo $homepage->getTitle();
+echo $homepage->render();
