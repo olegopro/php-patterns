@@ -268,6 +268,7 @@ echo $form->render();
 
 //DECORATOR
 
+/*
 $page = new \Decorator\BasicPage('Title');
 echo $page->getTitle();
 echo $page->render();
@@ -275,3 +276,23 @@ echo $page->render();
 $homepage = new \Decorator\HomePage($page);
 echo $homepage->getTitle();
 echo $homepage->render();
+*/
+
+//BRIDGE
+
+/*
+$mysqlDriver = new \Bridge\MySqlDriver('192.168.44.25', 'root', '2704509Ee', 'patterns');
+$sqliteDriver = new \Bridge\SqliteDriver('bridge.bd');
+
+$simpleSave = new \Bridge\SimpleSave($mysqlDriver, 'Hello');
+$simpleSave->save();
+
+$simpleSave = new \Bridge\SimpleSave($sqliteDriver, 'Hello');
+$simpleSave->save();
+
+$safeSave = new \Bridge\SafeSave($mysqlDriver, 'Hello', 'md5');
+$safeSave->save();
+
+$safeSave = new \Bridge\SafeSave($sqliteDriver, 'Hello', 'md5');
+$safeSave->save();
+*/
