@@ -235,3 +235,11 @@ $mail = new Mail('admin@admin', 'subject', 'message', '');
 $document = new Document($db, $log, $mail);
 $document->save('new document');
 */
+
+//ADAPTER
+
+/*$form = new \Adapter\WebMoney(['key' => 'JKHBSD@#(#@QKLN']);
+$form->getFormPay(100);*/
+
+$adapter = new \Adapter\PaymentAdapter(new \Adapter\WebMoney(['key' => 'JKHBSD@#(#@QKLN']));
+$adapter->pay(1000);
