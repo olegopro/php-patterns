@@ -8,7 +8,7 @@
 ┌─────────────────────────────────────────┐
 │           АБСТРАКТНАЯ ФАБРИКА           │ ← 🪆 Большая матрешка
 │  ┌───────────────────────────────────┐  │
-│  │        ФАБРИЧНЫЙ МЕТОД            │  │ ← 🪆 Средняя матрешка  
+│  │        ФАБРИЧНЫЙ МЕТОД            │  │ ← 🪆 Средняя матрешка
 │  │  ┌─────────────────────────────┐  │  │
 │  │  │     ПРОСТАЯ ФАБРИКА         │  │  │ ← 🪆 Маленькая матрешка
 │  │  │                             │  │  │
@@ -24,172 +24,229 @@
 
 ## 📊 Сравнительная таблица всех фабрик
 
-| Критерий | **Простая фабрика** | **Фабричный метод** | **Абстрактная фабрика** |
-|----------|-------------------|-------------------|----------------------|
-| **Уровень обертки** | 🟦 Базовая | 🟦🟨 Базовая + гибкость | 🟦🟨🟪 Базовая + гибкость + семейства |
-| **Что создает** | ОДИН объект | ОДИН объект | СЕМЕЙСТВО объектов |
-| **Количество методов** | 1 метод `create()` | 1 метод `getInstance()` | МНОГО методов `createX()` |
-| **Тип методов** | `static` | `public` (не static) | `public` (не static) |
-| **Можно переопределить?** | ❌ Нет (private static) | ✅ Да (protected) | ✅ Да (весь класс) |
-| **Пример использования** | `ProductFactory::create('book')` | `$factory->getService($enum)` | `$factory->createButton()` |
-| **Переключение типов** | Через параметр | Через параметр | Через замену фабрики |
-| **Совместимость объектов** | ➖ Не важно | ➖ Не важно | ✅ Гарантирована |
-| **Сложность** | 🟢 Простая | 🟡 Средняя | 🔴 Сложная |
-| **Когда использовать** | Простые задачи | Нужна гибкость | Семейства объектов |
+| Критерий                   | **Простая фабрика**              | **Фабричный метод**         | **Абстрактная фабрика**               |
+| -------------------------- | -------------------------------- | --------------------------- | ------------------------------------- |
+| **Уровень обертки**        | 🟦 Базовая                       | 🟦🟨 Базовая + гибкость     | 🟦🟨🟪 Базовая + гибкость + семейства |
+| **Что создает**            | ОДИН объект                      | ОДИН объект                 | СЕМЕЙСТВО объектов                    |
+| **Количество методов**     | 1 метод `create()`               | 1 метод `create()`          | МНОГО методов `createX()`             |
+| **Тип методов**            | `static`                         | `public` (не static)        | `public` (не static)                  |
+| **Можно переопределить?**  | ❌ Нет (static)                  | ✅ Да (через наследование)  | ✅ Да (весь класс)                    |
+| **Пример использования**   | `ProductFactory::create('book')` | `$factory->create('email')` | `$factory->createTable()`             |
+| **Переключение типов**     | Через параметр                   | Через параметр              | Через замену фабрики                  |
+| **Совместимость объектов** | ➖ Не важно                      | ➖ Не важно                 | ✅ Гарантирована                      |
+| **Сложность**              | 🟢 Простая                       | 🟡 Средняя                  | 🔴 Сложная                            |
+| **Когда использовать**     | Простые задачи                   | Нужна гибкость              | Семейства объектов                    |
 
 ---
 
 ## 1️⃣ Простая (Статическая) фабрика
 
-### 📁 Расположение: `fabric/Books/`
+### 📁 Расположение: `examples/Fabrics/Books/`
 
-### 🎯 **Суть:** 
+### 🎯 **Суть:**
+
 Самая простая обертка над `new`. Один статический метод создает разные типы объектов.
 
 ### 📝 **Код:**
+
 ```php
 // Использование:
-$book = ProductFactory::create('book', ['title' => 'PHP']);
-$clothes = ProductFactory::create('clothes', ['size' => 'M']);
+$book = ProductFactory::create('book', ['title' => 'PHP', 'author' => 'Автор']);
+$clothes = ProductFactory::create('clothes', ['size' => 'M', 'color' => 'blue']);
 
 // Реализация:
 class ProductFactory {
-    public static function create(string $type, array $params) {
+    public static function create(string $type, array $params): ProductInterface {
         switch ($type) {
-            case 'book': return new Book($params['title'], $params['author']);
-            case 'clothes': return new Clothes($params['size'], $params['color']);
+            case 'book':
+                return self::createBook($params);
+            case 'clothes':
+                return self::createClothes($params);
+            default:
+                throw new Exception("Неизвестный тип товара: {$type}");
         }
+    }
+
+    private static function createBook(array $params): Book {
+        return new Book($params['title'], $params['author'], $params['price'] ?? 25.99);
+    }
+
+    private static function createClothes(array $params): Clothes {
+        return new Clothes($params['size'], $params['color'], $params['price'] ?? 49.99);
     }
 }
 ```
 
 ### ✅ **Преимущества:**
+
 - Простота использования
 - Минимум кода
 - Понятно новичкам
+- Не нужно создавать экземпляр фабрики
 
 ### ❌ **Недостатки:**
-- Нельзя переопределить логику
-- Сложно тестировать
+
+- Нельзя переопределить логику (статические методы)
+- Сложно тестировать с моками
 - Нарушает принцип открытости/закрытости
+- Сложно расширять функциональность
 
 ### 🎯 **Когда использовать:**
+
 - Простые проекты
 - Нужно быстро решить задачу
 - Логика создания не будет меняться
+- Команда состоит из начинающих разработчиков
 
 ---
 
 ## 2️⃣ Фабричный метод
 
-### 📁 Расположение: `fabric/Provider/`
+### 📁 Расположение: `examples/Fabrics/Notifications/`
 
-### 🎯 **Суть:** 
-Добавляет гибкость через protected методы. Можно переопределить в наследниках.
+### 🎯 **Суть:**
+
+Добавляет гибкость через обычные (не статические) методы. Можно расширять через наследование.
 
 ### 📝 **Код:**
+
 ```php
 // Использование:
-$factory = new ServiceFactory();
-$service = $factory->getDebugDataServiceInstance(DataProvidersEnum::FIRST_DATA_PROVIDER);
+$factory = new NotificationFactory();
+$email = $factory->create('email');
+$sms = $factory->create('sms');
+$push = $factory->create('push');
 
 // Реализация:
-class ServiceFactory {
-    public function getDebugDataServiceInstance(DataProvidersEnum $enum) {
-        return match ($enum) {
-            DataProvidersEnum::FIRST_DATA_PROVIDER => $this->getFirstDebugDataService(),
-            DataProvidersEnum::SECOND_DATA_PROVIDER => $this->getSecondDebugDataService(),
+class NotificationFactory {
+    public function create(string $type): NotificationInterface {
+        return match (strtolower($type)) {
+            'email' => new EmailNotification(),
+            'sms'   => new SmsNotification(),
+            'push'  => new PushNotification(),
+            default => throw new InvalidArgumentException("Неподдерживаемый тип: {$type}")
         };
-    }
-    
-    protected function getFirstDebugDataService() {  // ← protected!
-        return new FirstDebugDataService();
     }
 }
 
-// Можно переопределить:
-class TestServiceFactory extends ServiceFactory {
-    protected function getFirstDebugDataService() {
-        return new MockFirstDebugDataService(); // ← Тестовая версия!
+// Можно расширить:
+class SocialNotificationFactory extends NotificationFactory {
+    public function create(string $type): NotificationInterface {
+        return match (strtolower($type)) {
+            'telegram' => new TelegramNotification(),
+            'discord'  => new DiscordNotification(),
+            default    => parent::create($type)  // ← Используем родительскую логику
+        };
     }
 }
 ```
 
 ### ✅ **Преимущества:**
-- Можно переопределить методы создания
-- Лучше для тестирования
+
+- Можно расширять через наследование
+- Лучше для тестирования (можно мокировать)
 - Следует принципу открытости/закрытости
+- Более гибкая архитектура
 
 ### ❌ **Недостатки:**
+
 - Сложнее простой фабрики
+- Нужно создавать экземпляр фабрики
 - Все еще создает только один тип объектов
 
 ### 🎯 **Когда использовать:**
+
 - Нужна гибкость в создании объектов
 - Планируется тестирование с моками
 - Логика создания может измениться
+- Хотите следовать принципам SOLID
 
 ---
 
 ## 3️⃣ Абстрактная фабрика
 
-### 📁 Расположение: `fabric/UI/`
+### 📁 Расположение: `examples/Fabrics/Furniture/`
 
-### 🎯 **Суть:** 
+### 🎯 **Суть:**
+
 Создает СЕМЕЙСТВА связанных объектов. Гарантирует их совместимость.
 
 ### 📝 **Код:**
+
 ```php
 // Использование:
-$windowsFactory = new WindowsUIFactory();
-$button = $windowsFactory->createButton('OK');      // Windows стиль
-$checkbox = $windowsFactory->createCheckbox('Да');  // Windows стиль
-// Все компоненты совместимы!
+$modernFactory = new ModernFurnitureFactory();
+$table = $modernFactory->createTable();    // Модерновый стол
+$chair = $modernFactory->createChair();    // Модерновый стул (сочетается со столом!)
 
-// Легко переключить платформу:
-$macFactory = new MacUIFactory();
-$button = $macFactory->createButton('OK');          // Mac стиль
-$checkbox = $macFactory->createCheckbox('Да');      // Mac стиль
+// Легко переключить стиль:
+$classicFactory = new ClassicFurnitureFactory();
+$table = $classicFactory->createTable();   // Классический стол
+$chair = $classicFactory->createChair();   // Классический стул (сочетается!)
 
 // Реализация:
-interface UIFactoryInterface {
-    public function createButton(string $text): ButtonInterface;
-    public function createCheckbox(string $label): CheckboxInterface;
+interface FurnitureFactoryInterface {
+    public function createTable(): TableInterface;
+    public function createChair(): ChairInterface;
+    public function getStyleName(): string;
 }
 
-class WindowsUIFactory implements UIFactoryInterface {
-    public function createButton($text) { return new WindowsButton($text); }
-    public function createCheckbox($label) { return new WindowsCheckbox($label); }
+class ModernFurnitureFactory implements FurnitureFactoryInterface {
+    public function createTable(): TableInterface {
+        return new ModernTable();  // Стекло + хром
+    }
+
+    public function createChair(): ChairInterface {
+        return new ModernChair();  // Пластик + алюминий
+    }
+
+    public function getStyleName(): string {
+        return 'Модерн';
+    }
 }
 
-class MacUIFactory implements UIFactoryInterface {
-    public function createButton($text) { return new MacButton($text); }
-    public function createCheckbox($label) { return new MacCheckbox($label); }
+class ClassicFurnitureFactory implements FurnitureFactoryInterface {
+    public function createTable(): TableInterface {
+        return new ClassicTable(); // Дуб + лак
+    }
+
+    public function createChair(): ChairInterface {
+        return new ClassicChair(); // Дуб + кожа
+    }
+
+    public function getStyleName(): string {
+        return 'Классика';
+    }
 }
 ```
 
 ### ✅ **Преимущества:**
+
 - Создает семейства совместимых объектов
-- Легко переключаться между платформами
-- Гарантирует единый стиль
-- Легко добавить новую платформу
+- Легко переключаться между стилями/темами
+- Гарантирует единый стиль всех компонентов
+- Легко добавить новый стиль (новую фабрику)
 
 ### ❌ **Недостатки:**
+
 - Самая сложная в реализации
-- Много кода
+- Много кода и интерфейсов
 - Может быть избыточной для простых задач
+- Требует понимания концепции "семейств"
 
 ### 🎯 **Когда использовать:**
+
 - Нужны семейства связанных объектов
-- Поддержка нескольких платформ/тем
-- Важна совместимость компонентов
-- Планируется расширение системы
+- Поддержка нескольких стилей/тем/платформ
+- Важна совместимость компонентов между собой
+- Планируется масштабирование системы
 
 ---
 
 ## 🔄 Эволюция сложности
 
 ### Путь усложнения:
+
 ```
 Прямое создание → Простая фабрика → Фабричный метод → Абстрактная фабрика
      🔧              🟢               🟡                🔴
@@ -199,71 +256,94 @@ class MacUIFactory implements UIFactoryInterface {
 ### Что добавляет каждый уровень:
 
 **Простая фабрика добавляет:**
+
 - ✅ Централизованное создание объектов
 - ✅ Скрывает сложность конструкторов
+- ✅ Единая точка создания
 
 **Фабричный метод добавляет:**
-- ✅ Возможность переопределения
+
+- ✅ Возможность расширения через наследование
 - ✅ Лучшую тестируемость
 - ✅ Принцип открытости/закрытости
+- ✅ Гибкость архитектуры
 
 **Абстрактная фабрика добавляет:**
+
 - ✅ Создание семейств объектов
 - ✅ Гарантию совместимости
 - ✅ Легкость переключения между семействами
+- ✅ Масштабируемость системы
 
 ---
 
 ## 🎯 Правила выбора фабрики
 
 ### 🟢 **Используй простую фабрику если:**
+
 - Проект небольшой
 - Логика создания не будет меняться
 - Нужно быстро решить задачу
 - Команда состоит из начинающих разработчиков
+- Создаешь разнородные объекты (книги, одежда)
 
 ### 🟡 **Используй фабричный метод если:**
+
 - Нужна гибкость в создании объектов
 - Планируется тестирование с моками
 - Логика создания может измениться
 - Нужно следовать принципам SOLID
+- Создаешь объекты одного типа (уведомления)
 
 ### 🔴 **Используй абстрактную фабрику если:**
+
 - Нужны семейства связанных объектов
-- Поддержка нескольких платформ/тем/стилей
+- Поддержка нескольких стилей/тем/платформ
 - Важна совместимость компонентов между собой
 - Планируется масштабирование системы
+- Создаешь наборы объектов (мебель, UI компоненты)
 
 ---
 
 ## 🚀 Практические примеры из жизни
 
 ### Простая фабрика:
+
 ```php
-// Создание документов
-DocumentFactory::create('pdf', $data);
-DocumentFactory::create('excel', $data);
+// Создание разнородных документов
+$pdf = DocumentFactory::create('pdf', $data);
+$excel = DocumentFactory::create('excel', $data);
+$word = DocumentFactory::create('word', $data);
 ```
 
 ### Фабричный метод:
-```php
-// API клиенты с возможностью мокирования
-$factory = new ApiClientFactory();
-$client = $factory->createClient('stripe');
 
-// В тестах:
-$testFactory = new MockApiClientFactory();
-$mockClient = $testFactory->createClient('stripe');
+```php
+// Система уведомлений с возможностью расширения
+$factory = new NotificationFactory();
+$email = $factory->create('email');
+
+// В расширенной версии:
+$advancedFactory = new SocialNotificationFactory();
+$telegram = $advancedFactory->create('telegram');
+$email = $advancedFactory->create('email'); // Старые работают!
 ```
 
 ### Абстрактная фабрика:
+
 ```php
-// UI библиотека для разных платформ
-$factory = new MobileUIFactory();  // или DesktopUIFactory
-$button = $factory->createButton();
-$input = $factory->createInput();
-$dialog = $factory->createDialog();
-// Все компоненты в едином стиле!
+// UI библиотека для разных тем
+$darkFactory = new DarkThemeFactory();
+$button = $darkFactory->createButton();
+$input = $darkFactory->createInput();
+$dialog = $darkFactory->createDialog();
+// Все компоненты в темной теме!
+
+// Переключение на светлую тему:
+$lightFactory = new LightThemeFactory();
+$button = $lightFactory->createButton();    // Те же методы!
+$input = $lightFactory->createInput();      // Тот же интерфейс!
+// Но другой стиль!
 ```
 
 ---
@@ -271,22 +351,27 @@ $dialog = $factory->createDialog();
 ## 📚 Заключение
 
 **Ключевая идея:** каждая следующая фабрика включает возможности предыдущей + добавляет новые:
+
 - **Простая** → создает объекты
-- **Фабричный метод** → создает объекты + гибкость
-- **Абстрактная** → создает объекты + гибкость + семейства
+- **Фабричный метод** → создает объекты + расширяемость
+- **Абстрактная** → создает объекты + расширяемость + семейства
 
 **Золотое правило:** начинайте с простой фабрики и усложняйте только при необходимости!
+
+### Быстрая шпаргалка:
+
+- 🏪 **Разные товары** → Простая фабрика (Books)
+- 📧 **Один тип, разные реализации** → Фабричный метод (Notifications)
+- 🏠 **Наборы совместимых объектов** → Абстрактная фабрика (Furniture)
 
 ---
 
 ## 📁 Структура примеров в проекте
 
 ```
-fabric/
-├── Books/          # 🟢 Простая фабрика
-├── Provider/       # 🟡 Фабричный метод  
-├── UI/             # 🔴 Абстрактная фабрика
+examples/Fabrics/
+├── Books/              # 🟢 Простая фабрика (товары)
+├── Notifications/      # 🟡 Фабричный метод (уведомления)
+├── Furniture/          # 🔴 Абстрактная фабрика (мебельные семейства)
 └── README_FACTORIES_COMPARISON.md  # 📚 Этот файл
 ```
-
-Изучайте, экспериментируйте и выбирайте подходящий уровень сложности для своих задач! 🎯
